@@ -1,6 +1,10 @@
+[TOC]
+
+
+
 #<center>线性模型</center>
 
-给定一系列样本$x_j = (x_{j1};x_{j2},\dots,x_{jn})$,其中$x_{j1};x_{j2},\dots,x_{jn}$为第$j$个样本的$n$个属性值,线性模型尝试学习得到一个通过线性组合来进行预测的函数.即
+给定一系列样本$x^{(j)} = (x_{1}^{(j)};x_{2}^{(j)},\dots,x_{n}^{(j)})$,其中$x_{1}^{(j)},x_{2}^{(j)},\dots,x_{n}^{(j)}$为第$j$个样本的$n$个属性值,线性模型尝试学习得到一个通过线性组合来进行预测的函数.即
 
 $$
 f(x) = \omega_1 x_1 + \omega_2 x_2 + \dots + \omega_n x_n + b  
@@ -16,17 +20,17 @@ $$
 
 ## 线性回归(linear regression)
 
-线性回归是最基本的线性模型.给定数据集$D = \{(x_j,y_j) | 1 \le j \le m\}$.线性模型试图学会
+线性回归是最基本的线性模型.给定数据集$D = \{(x^{(j)},y^{(j)}) | 1 \le j \le m\}$.线性模型试图学会
 
 $$
-    f(x_j) = \omega x_j + b \approx y_j
+    f(x^{(j)}) = \omega x^{(j)} + b \approx y^{(j)}
 $$
 
 为了使预测准确,我们可以使和方差(SSE)最小化.
 
 $$
-(\omega^*,b^*) = arg min \sum_{j=1}^{m} (f(x_j) - y_j)^2 \\
-= argmin \sum_{j=1}^{m} (\omega x_i + b - y_j)^2
+(\omega^*,b^*) = arg min \sum_{j=1}^{m} (f(x^{(j)}) - y^{(j)})^2 \\
+= argmin \sum_{j=1}^{m} (\omega x^{(j)} + b - y^{(j)})^2
 $$
 
 数学上求解上述表达式可以采用"正规方程法"."正规方程法"利用最小二乘法,试图找到一个超平面,使所有样本到平民啊地欧氏距离之和最小.
@@ -38,10 +42,10 @@ $$
 $$
 X = 
 \begin{pmatrix}
-x_{11} & x_{12} & \dots & x_{1n} & 1 \\ 
-x_{21} & x_{22} & \dots & x_{2n} & 1 \\ 
+x^{(1)}_1 & x^{(1)}_2 & \dots & x^{(1)}_n & 1 \\ 
+x^{(2)}_1 & x^{(2)}_2 & \dots & x^{(n)}_n & 1 \\ 
 \vdots & \vdots & \ddots & \vdots & \vdots \\
-x_{m1} & x_{m2} & \dots & x_{mn} & 1 
+x^{(m)}_1 & x^{(m)}_2 & \dots & x^{(m)}_n & 1 \\ 
 \end{pmatrix}
 $$
 
@@ -49,7 +53,7 @@ $$
 
 $$
 y = \begin{pmatrix}
-y_1 \\ y_2 \\ \vdots \\ y_m
+y^{(1)} \\ y^{(2)} \\ \vdots \\ y^{(m)}
 \end{pmatrix}
 $$
 
@@ -75,12 +79,12 @@ $$
 
 除了正规方程法求解之外,还可以使用梯度下降的优化方法得到一个较优解.
 
-设$E(\omega,b) = \sum_{j=1}^{m} (\omega x_i + b - y_j)^2$,我们分别对$\omega和b$求偏导.
+设$E(\omega,b) = \sum_{j=1}^{m} (\omega x^{(j)} + b - y^{(j)})^2$,我们分别对$\omega和b$求偏导.
 
 $$
-\frac{\partial{E}}{\partial \omega} = 2 \bigg(\omega \sum_{j=1}^m x_j^2 - \sum_{j=1}^m(y_j - b) x_j \bigg)
+\frac{\partial{E}}{\partial \omega} = 2 \bigg(\omega \sum_{j=1}^m {x^{(j)}}^2 - \sum_{j=1}^m(y^{(j)} - b) x^{(j)} \bigg)
 \\ 
-\frac{\partial E}{\partial b} = 2 \bigg( mb - \sum_{j=1}^m (y_j - \omega x_j) \bigg)
+\frac{\partial E}{\partial b} = 2 \bigg( mb - \sum_{j=1}^m (y^{(j)} - \omega x^{(j)}) \bigg)
 $$
 
 令上式均为0即可得到$\omega$的最优解.
@@ -392,7 +396,9 @@ $$
 显然有:
 
 $$
-p(y= 1 | x) = \frac{ 1 }{1 + e^{-(\omega^Tx + b)}} \tag{2.5} $$
+p(y= 1 | x) = \frac{ 1 }{1 + e^{-(\omega^Tx + b)}} \tag{2.5} 
+$$
+
 $$
 p(y=0 | x) = 1 - \frac{ 1 }{1 + e^{-(\omega^Tx + b)}}  \tag{2.6}
 $$
@@ -400,13 +406,13 @@ $$
 计算似然函数得:
 
 $$
-L(\omega,b) = \prod_{i=1}^np(y=1|x)^{y_i}p(y=0|x)^{1-y_i} \tag{2.7}
+L(\omega,b) = \prod_{j=1}^mp(y=1|x)^{y^{(j)}}p(y=0|x)^{(1-y^{(j)})} \tag{2.7}
 $$
 
 取对数得对数似然函数:
 
 $$
-L'(\omega;b) = \sum_{i=1}^n[y_ilog(p(y=1|x)) + (1 - y_i)log(p(y=0|x))] \tag{2.8}
+L'(\omega;b) = \sum_{j=1}^m[y^{(j)}log(p(y=1|x)) + (1 - y^{(j)})log(p(y=0|x))] \tag{2.8}
 $$
 
 我们只需要将对数似然函数最大化即可估计$\omega 和 b$.
@@ -414,13 +420,13 @@ $$
 对$L'$取负号,即为二分类的交叉熵损失函数:
 
 $$
-L(\omega,b) = -\sum_{i=1}^n\bigg[y_ilog(p(y=1|x)) + (1 - y_i)log(p(y=0|x))\bigg] \tag{2.9}
+L(\omega,b) = -\sum_{j=1}^m\bigg[y^{(j)}log(p(y=1|x)) + (1 - y^{(j)})log(p(y=0|x))\bigg] \tag{2.9}
 $$
 
 或者写成常见的形式:
 
 $$
-L(\omega,b) = - \sum_{i=1}^n \bigg[ y_ilog(\hat{y_i}) + (1-y_i) log(1- \hat{y}) \bigg]
+L(\omega,b) = - \sum_{j=1}^m \bigg[ y^{(j)}log(\hat{y^{(j)}}) + (1-y^{(j)}) log(1- \hat{y^{(j)}}) \bigg] \tag{2.10}
 $$
 
 使用梯度下降法降低交叉熵损失函数值,从而可以估计出参数$\omega,b$的大小.
@@ -584,3 +590,61 @@ solver.draw_confision_matrix()
 <center>
 <img src = "linear7.png" width="60%" height="50%">
 </center>
+
+可以看到预测的准确率还是比较高的.
+
+## 多分类学习
+
+现实中的分类问题常常需要进行多分类.考虑$N$个类别$C_1,C_2,\dots,C_N$,多分类学习的基本思路是拆分法,将多分类任务拆分为若干个二分类任务求解.
+
+最经典的拆分策略有三种:"一对一"(One vs. One , OvO),"一对余"(One vs. Rest, OvR)和"多对多"(Many vs. Many , MvM).
+
+**OvO**
+
+给定数据集$D = \{(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),\dots,(x^{(m)},y^{(m)})\} , y^{(j)} \in \{ C_1,C_2,\dots,C_N\} $.OvO将这N个类别两两配对,从而产生$N(N-1)/2$个二分类任务.训练完成后,在测试阶段将获得$N(N-1)/2$个分类结果,最终结果按照被预测得最多的类别作为最终分类结果.
+
+<center>
+<img src = "linear8.png" width="60%" height="50%">
+</center>
+
+**OvR**
+
+OvR每次将一个类的样例作为正例,所有其他类的样例作为反例来训练N个分类器,在测试时如果仅有一个分类器预测为正类,则对应的类别标记作为最终的分类结果.若有多个分类器预测为正类,则通常考虑各个分类器的预测置信度,选择置信度最大的类别标记作为分类结果.
+
+<center>
+<img src = "linear9.png" width="60%" height="50%">
+</center>
+
+**MvM**
+
+MvM是每次将若干个类作为正类,若干个其他类作为反类,OvO和OvR都是MvM的特殊情形. MvM正反类构造最常见的技术是"纠错输出码"(Error Correcting Output Codes, ECOC).
+"纠错输出码"主要将N个类进行M次划分,每次划分都有正类和反类,从而形成了二分类训练集,这样会生成M个分类器.使用这M个分类器进行预测,得到一个预测组成的编码,将这个编码与每个类别的编码进行比较,返回其中距离最小的类别作为最终预测结果.
+
+以上分类方法都是基于二分类,有没有一种可以直接分类的方法呢?
+
+Softmax回归方法是逻辑回归向多分类的推广.对于$N$个类别数据集$D$,softmax回归用于得到输入的数据属于各个类别的概率.
+
+对于任意一个给定的输入$x^{(j)}$,我们的函数如下:
+
+$$
+h_{\theta}(x^{(j)}) = \begin{bmatrix}
+p(y^{(j)} = 1 | x^{(j)};\theta) \\
+p(y^{(j)} = 2 | x^{(j)};\theta) \\
+\vdots \\
+p(y^{(j)} = N | x^{(j)};\theta) 
+\end{bmatrix}
+= \frac{1}{\sum_{i=1}^Ne^{\theta_i^Tx_i^{(j)}}}\begin{bmatrix}
+e^{\theta_1^Tx_1^{(j)}} \\
+e^{\theta_2^Tx_2^{(j)}} \\
+\vdots \\
+e^{\theta_N^Tx_N^{(j)}}
+\end{bmatrix}
+$$
+
+
+其中$\theta_1,\theta_2,\dots,\theta_k$是模型的参数.$\frac{1}{\sum_{i=1}^Ne^{\theta_i^Tx_i^{(j)}}}$对概率分布进行归一化.
+
+
+
+ 
+
